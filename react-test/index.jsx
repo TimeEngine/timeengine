@@ -91,6 +91,6 @@
   );
 
 
-  const mount = React.render(TopElement, document.getElementById('container'));
+  const mount = ReactDOM.render((TopElement, document.getElementById('container'));
 
 })();
