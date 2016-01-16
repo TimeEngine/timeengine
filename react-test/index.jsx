@@ -1,4 +1,4 @@
-/*global React __ Immutable __Component*/
+/*global React ReactDOM __ Immutable __Component*/
 
 //const __Component = require("timeengine-react");
 //this code is required to transpile by `npm run jsx`
@@ -90,7 +90,6 @@
   </div>
   );
 
-
-  const mount = ReactDOM.render((TopElement, document.getElementById('container'));
+  const mount = ReactDOM.render(TopElement, document.getElementById('container'));
 
 })();
