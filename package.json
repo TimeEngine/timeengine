@@ -1,0 +1,44 @@
+{
+  "name": "timeengine",
+  "version": "5.0.0",
+  "description": "TimeEngine is a tiny, simple yet versatile JavaScript library of event system. Built for Declarative and Functional Reactive Programming.",
+  "main": "timeengine.js",
+  "scripts": {
+    "test": "babel timeengine.es -o timeengine.js; babel-node test.js",
+    "jsx": "./node_modules/.bin/babel ./react-test/index.jsx -o ./react-test/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TimeEngine/timeengine.git"
+  },
+  "keywords": [
+    "FRP",
+    "functional",
+    "reactive",
+    "time",
+    "physics",
+    "mathematics",
+    "stream",
+    "sequence",
+    "event",
+    "promise"
+  ],
+  "author": "Ken Okabe",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TimeEngine/timeengine/issues"
+  },
+  "homepage": "http://timeengine.github.io",
+  "devDependencies": {
+    "babel-cli": "^6.4.0",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "eslint": "^1.10.3",
+    "react": "^0.14.6",
+    "react-dom": "^0.14.6",
+    "timeengine-react": "^1.1.1"
+  },
+  "dependencies": {
+    "immutable": "^3.7.6"
+  }
+}
