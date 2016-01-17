@@ -33,6 +33,7 @@
     });
     seq.IndexOnTimestamp = {};
     seq.TimestampOnIndex = {};
+    seq.done = 0;
     //-----------------
     Object.keys(__.api).map(function (api) {
       seq[api] = __.api[api](__, seq, store);
@@ -55,24 +56,26 @@
             seq[seq.length] = seq.valOnT;
           }
           //----------------------
-          Object.keys(seq.updatedFor).map(function (key) {
-            seq.updatedFor[key] = 1;
-          });
-          seq.us.map(function (u) {
-            //-------------------
-            var dsAllUpdated = u.ds.map(function (d) {
-              return d.updatedFor[u.id];
-            }).reduce(function (a, b) {
-              return a * b;
+          if (seq.done === 0) {
+            Object.keys(seq.updatedFor).map(function (key) {
+              seq.updatedFor[key] = 1;
             });
-            if (dsAllUpdated === 1) {
-              u.t = u.eq(tval); //propagate
-              //--clear updated ds in non-interference way--
-              u.ds.map(function (d) {
-                d.updatedFor[u.id] = 0;
+            seq.us.map(function (u) {
+              //-------------------
+              var dsAllUpdated = u.ds.map(function (d) {
+                return d.updatedFor[u.id];
+              }).reduce(function (a, b) {
+                return a * b;
               });
-            }
-          });
+              if (dsAllUpdated === 1) {
+                u.t = u.eq(tval); //propagate
+                //--clear updated ds in non-interference way--
+                u.ds.map(function (d) {
+                  d.updatedFor[u.id] = 0;
+                });
+              }
+            });
+          }
         }
       }
     });

@@ -8,12 +8,13 @@
     .log('timeengine test started...');
 
   const a = __();
-  const b = __();
-  const c = __([a, b]).__(([a, b]) => (a + b));
+  const b = __([a]);
+  //  const c = __([a, b]).__(([a, b]) => (a + b));
 
+  //var c = a.__([b]);
   const timeseq1 = a.log('a');
   const timeseq2 = b.log('b');
-  const timeseq3 = c.log('c');
+  //  const timeseq3 = c.log('c');
 
   const timeseq4 = __.intervalSeq(Immutable.Range(0, 1), 1000)
     .__(() => {

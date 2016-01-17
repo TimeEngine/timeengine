@@ -20,6 +20,7 @@
     });
     seq.IndexOnTimestamp = {};
     seq.TimestampOnIndex = {};
+    seq.done = 0;
     //-----------------
     Object.keys(__.api).map((api) => {
       seq[api] = __.api[api](__, seq, store);
@@ -41,22 +42,24 @@
               seq[seq.length] = seq.valOnT;
             }
             //----------------------
-            Object.keys(seq.updatedFor).map((key) => {
-              seq.updatedFor[key] = 1;
-            });
-            seq.us.map((u) => {
-              //-------------------
-              const dsAllUpdated = u.ds
-                .map((d) => (d.updatedFor[u.id]))
-                .reduce((a, b) => (a * b));
-              if (dsAllUpdated === 1) {
-                u.t = u.eq(tval); //propagate
-                //--clear updated ds in non-interference way--
-                u.ds.map((d) => {
-                  d.updatedFor[u.id] = 0;
-                });
-              }
-            });
+            if (seq.done === 0) {
+              Object.keys(seq.updatedFor).map((key) => {
+                seq.updatedFor[key] = 1;
+              });
+              seq.us.map((u) => {
+                //-------------------
+                const dsAllUpdated = u.ds
+                  .map((d) => (d.updatedFor[u.id]))
+                  .reduce((a, b) => (a * b));
+                if (dsAllUpdated === 1) {
+                  u.t = u.eq(tval); //propagate
+                  //--clear updated ds in non-interference way--
+                  u.ds.map((d) => {
+                    d.updatedFor[u.id] = 0;
+                  });
+                }
+              });
+            }
           }
         }
       });
