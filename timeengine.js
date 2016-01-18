@@ -52,20 +52,17 @@
         },
         set: function set(tval) {
           seq.valOnT = tval;
-          //----------------------
           if (store) {
             var now = Date.now();
             seq.IndexOnTimestamp[now] = seq.length;
             seq.TimestampOnIndex[seq.length] = now;
             seq[seq.length] = seq.valOnT;
           }
-          //----------------------
           if (seq.done === 0) {
             Object.keys(seq.updatedFor).map(function (key) {
               seq.updatedFor[key] = 1;
             });
             seq.us.map(function (u) {
-              //-------------------
               var dsAllUpdated = u.ds.map(function (d) {
                 return d.updatedFor[u.id];
               }).reduce(function (a, b) {
@@ -83,7 +80,6 @@
         }
       }
     });
-    //=====================================
     return seq;
   };
   //==================
