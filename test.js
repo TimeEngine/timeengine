@@ -6,7 +6,7 @@
   (() => {
     const __delay = __
       .intervalSeq(Immutable
-        .Repeat('timeengine test started...', 1), 0)
+        .Seq.of('timeengine test started...'), 0)
       .log();
   })();
   (() => {
@@ -83,7 +83,7 @@
         const p = new Promise((resolve, reject) => {
           setTimeout(() => {
             resolve(99);
-          }, 1000);
+          }, 0);
         });
 
         p
@@ -138,7 +138,7 @@
             return value + 1;
           });
 
-        const __log = __p2.log("__p2");
+        const __log = __p3.log("__p3");
         __p.t = 99;
         __p.t = 999;
 
@@ -173,7 +173,7 @@
   (() => {
     const __delay = __
       .intervalSeq(Immutable
-        .Seq.of("----------------------------------"), 3500)
+        .Seq.of("----------------------------------"), 8000)
       .log()
       .__(() => {
 
