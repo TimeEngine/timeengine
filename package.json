@@ -1,6 +1,6 @@
 {
   "name": "timeengine",
-  "version": "5.1.1",
+  "version": "5.1.2",
   "description": "TimeEngine is a tiny, simple yet versatile JavaScript library of event system. Built for Declarative and Functional Reactive Programming.",
   "main": "timeengine.js",
   "scripts": {
