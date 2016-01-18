@@ -57,7 +57,6 @@
             </span>);
   };
 
-
   // no seq object destroy
   const CounterReloadComponent = () => {
     const __clicked = __();
@@ -77,13 +76,12 @@
 
   const CounterComponent = () => {
     const __updn = __(); //1 or -1 or initially 0
-    const __count = __updn
-      .__((updn) => (__count.t += updn));
+    const __count = __();
+    __updn.__((updn) => (__count.t += updn));
     const __seqEl = __count
       .__((count) => (<span>{count}</span>));
     const init = () => {
       __count.t = 0; //initial value of count
-      __updn.t = 0; //just trigger to view the init
     };
     const __runNow = __
       .intervalSeq(Immutable.Range(0, 1), 0)
