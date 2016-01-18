@@ -37,6 +37,7 @@
     });
     seq.IndexOnTimestamp = {};
     seq.TimestampOnIndex = {};
+    seq.propagating = 0;
     seq.done = 0;
     //-----------------
     Object.keys(__.api).map(function (api) {
@@ -51,31 +52,38 @@
           return seq.valOnT;
         },
         set: function set(tval) {
-          seq.valOnT = tval;
-          if (store) {
-            var now = Date.now();
-            seq.IndexOnTimestamp[now] = seq.length;
-            seq.TimestampOnIndex[seq.length] = now;
-            seq[seq.length] = seq.valOnT;
-          }
-          if (seq.done === 0) {
-            Object.keys(seq.updatedFor).map(function (key) {
-              seq.updatedFor[key] = 1;
-            });
-            seq.us.map(function (u) {
-              var dsAllUpdated = u.ds.map(function (d) {
-                return d.updatedFor[u.id];
-              }).reduce(function (a, b) {
-                return a * b;
+          //sanity check
+          if (seq.propagating === 0 && seq.ds.length !== 0) {
+            throw new Error("cannot set a value on sequence that depends on other sequences");
+          } else {
+            seq.propagating = 0;
+            seq.valOnT = tval;
+            if (store) {
+              var now = Date.now();
+              seq.IndexOnTimestamp[now] = seq.length;
+              seq.TimestampOnIndex[seq.length] = now;
+              seq[seq.length] = seq.valOnT;
+            }
+            if (seq.done === 0) {
+              Object.keys(seq.updatedFor).map(function (key) {
+                seq.updatedFor[key] = 1;
               });
-              if (dsAllUpdated === 1) {
-                u.t = u.eq(tval); //propagate
-                //--clear updated ds in non-interference way--
-                u.ds.map(function (d) {
-                  d.updatedFor[u.id] = 0;
+              seq.us.map(function (u) {
+                var dsAllUpdated = u.ds.map(function (d) {
+                  return d.updatedFor[u.id];
+                }).reduce(function (a, b) {
+                  return a * b;
                 });
-              }
-            });
+                if (dsAllUpdated === 1) {
+                  u.propagating = 1;
+                  u.t = u.eq(tval); //propagate
+                  //clear updated ds in non-interference way
+                  u.ds.map(function (d) {
+                    d.updatedFor[u.id] = 0;
+                  });
+                }
+              });
+            }
           }
         }
       }

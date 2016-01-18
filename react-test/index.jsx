@@ -32,11 +32,54 @@
       .__((count) => (<div>Timer : {count}</div>)));
   };
 
+  // memory leak, performance issue
+  //how about games? memoized_reduce is needed
+  // to calculate many elemnents of the long array
+  const CounterComponentStateHistory = () => {
+    const __updn = __(true); //1 or -1 or initially 0
+    const __count = __updn
+      .__((updn) => (__updn
+          .reduce((a, b) => (a + b)))); //js Array.reduce
+    const __seqEl = __count
+      .__((count) => (<span>{count}</span>));
+    const init = () => {
+      __updn.t = 0; //just trigger to view the init
+    };
+    const __runNow = __
+      .intervalSeq(Immutable.Range(0, 1), 0)
+      .__(init);
+    return (<span>
+             <button
+      onClick={() => (__updn.t = 1)}>Up</button>
+             <button
+      onClick={() => (__updn.t = -1)}>Down</button>
+             &nbsp;&nbsp;{__Component(__seqEl)}&nbsp;&nbsp;
+            </span>);
+  };
+
+
+  // no seq object destroy
+  const CounterReloadComponent = () => {
+    const __clicked = __();
+    const onClick = () => {
+      __clicked.t = true;
+    };
+    const __runNow = __
+      .intervalSeq(Immutable.Range(0, 1), 0)
+      .__(onClick);
+    const __seqEl = __([__clicked])
+      .__(() => (<span>{CounterComponentStateHistory()}</span>));
+    return (<div>
+            {__Component(__seqEl)}
+           <button onClick={onClick}>Reload</button>
+          </div>);
+  };
+
   const CounterComponent = () => {
-    const __count = __();
     const __updn = __(); //1 or -1 or initially 0
-    const __seqEl = __updn
-      .__((updn) => (__count.t += updn))
+    const __count = __updn
+      .__((updn) => (__count.t += updn));
+    const __seqEl = __count
       .__((count) => (<span>{count}</span>));
     const init = () => {
       __count.t = 0; //initial value of count
@@ -56,42 +99,11 @@
           </div>);
   };
 
-  const CounterComponent2 = () => {
-    const __updn = __(true); //1 or -1 or initially 0
-    const __seqEl = __updn
-      .__((updn) => (__updn
-          .reduce((a, b) => (a + b)))) //js Array.reduce
-      .__((count) => (<span>{count}</span>));
-    const init = () => {
-      __updn.t = 0; //just trigger to view the init
-    };
-    const __runNow = __
-      .intervalSeq(Immutable.Range(0, 1), 0)
-      .__(init);
-    return (<span>
-             <button
-      onClick={() => (__updn.t = 1)}>Up</button>
-             <button
-      onClick={() => (__updn.t = -1)}>Down</button>
-             &nbsp;&nbsp;{__Component(__seqEl)}&nbsp;&nbsp;
-            </span>);
-  };
-  // no seq object destroy
-  const CounterReloadComponent = () => {
-    const __clicked = __();
-    const onClick = () => {
-      __clicked.t = true;
-    };
-    const __runNow = __
-      .intervalSeq(Immutable.Range(0, 1), 0)
-      .__(onClick);
-    const __seqEl = __([__clicked])
-      .__(() => (<span>{CounterComponent2()}</span>));
-    return (<div>
-            {__Component(__seqEl)}
-           <button onClick={onClick}>Reload</button>
-          </div>);
-  };
+  //to copy to document
+  //__count.t += updn is deistructive operation!?
+  //1. __count is const and immutable sequence
+  //2. t (time index) is conceptually different before and after the operation, so __count.t is different and immutable  before and after the operation
+  //3. Integirity between sequences is guranteed by dependency system.
 
   const PhysicsComponent = () => {
     //-------Physics-------------------------------
@@ -145,11 +157,11 @@
       =====================
       {TimerComponent()}
       =====================
-      {CounterComponent()}
-      =====================
-      <div>{CounterComponent2()}</div>
+      <div>{CounterComponentStateHistory()}</div>
       =====================
       {CounterReloadComponent()}
+      =====================
+      {CounterComponent()}
       =====================
       {ButtonComponent()}
       =====================
