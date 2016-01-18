@@ -15,6 +15,10 @@
     var ds = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
     var store = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 
+    if (typeof ds === "boolean") {
+      store = ds;
+      ds = [];
+    }
     var seq = []; //seq is vanilla JS array + features
     seq.id = getID();
     seq.store = store;

@@ -39,7 +39,12 @@
     .__(() => {
       __a.t = 1;
     });
+  const __u = __([], true);
+  __u.t = 1;
+  __u.t = 2;
+  __u.t = 3;
 
+  __.log.t = __u[1];
 
   const timerts = __.intervalSeq(Immutable.Range(0, 5), 1000)
     .log(">>>");

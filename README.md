@@ -19,7 +19,7 @@
 
 [![NPM](https://nodei.co/npm/timeengine.png?downloads=true)](https://nodei.co/npm/timeengine/)
 
-TimeEngine is a tiny, simple yet versatile JavaScript library of event system. Built for Declarative and Functional Reactive Programming.
+##### TimeEngine is a tiny, simple yet versatile library that provides first class reactive components with smart dependency resolving capability in JavaScript. Built for a new programming paradigm: Dependency driven Functional Reactive Programming (DFRP).
 
 See the Documentation of the project:
 

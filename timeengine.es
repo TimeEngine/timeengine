@@ -7,6 +7,10 @@
   //-----------------------------------
   //__([a,b], true) // new seq depends on ds =[a,b]
   const __ = (ds = [], store = false) => {
+    if (typeof ds === "boolean") {
+      store = ds;
+      ds = [];
+    }
     const seq = []; //seq is vanilla JS array + features
     seq.id = getID();
     seq.store = store;
@@ -34,20 +38,17 @@
           },
           set(tval) {
             seq.valOnT = tval;
-            //----------------------
             if (store) {
               const now = Date.now();
               seq.IndexOnTimestamp[now] = seq.length;
               seq.TimestampOnIndex[seq.length] = now;
               seq[seq.length] = seq.valOnT;
             }
-            //----------------------
             if (seq.done === 0) {
               Object.keys(seq.updatedFor).map((key) => {
                 seq.updatedFor[key] = 1;
               });
               seq.us.map((u) => {
-                //-------------------
                 const dsAllUpdated = u.ds
                   .map((d) => (d.updatedFor[u.id]))
                   .reduce((a, b) => (a * b));
@@ -63,7 +64,6 @@
           }
         }
       });
-    //=====================================
     return seq;
   };
   //==================
