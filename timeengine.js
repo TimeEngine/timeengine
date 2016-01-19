@@ -58,10 +58,10 @@
           } else {
             seq.propagating = 0;
             seq.valOnT = tval;
+            seq.T = Date.now();
             if (store) {
-              var now = Date.now();
-              seq.IndexOnTimestamp[now] = seq.length;
-              seq.TimestampOnIndex[seq.length] = now;
+              seq.IndexOnTimestamp[seq.T] = seq.length;
+              seq.TimestampOnIndex[seq.length] = seq.T;
               seq[seq.length] = seq.valOnT;
             }
             if (seq.done === 0) {
@@ -89,15 +89,6 @@
       }
     });
 
-    Object.defineProperties(seq, {
-      T: { //foo.T
-
-        get: function get() {
-          return Date.now();
-        }
-      }
-    });
-
     return seq;
   };
   //==================
@@ -106,11 +97,11 @@
   //--------------------------------------
   __.api.__ = function (__, seq, store) {
     return function (f) {
-      var __pedSeq = __([seq], store);
-      __pedSeq.eq = function (t) {
-        return f(t);
+      var __newSeq = __([seq], store);
+      __newSeq.eq = function (val) {
+        return f(val, seq.T);
       };
-      return __pedSeq;
+      return __newSeq;
     };
   };
 

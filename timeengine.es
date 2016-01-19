@@ -45,10 +45,10 @@
             } else {
               seq.propagating = 0;
               seq.valOnT = tval;
+              seq.T = Date.now();
               if (store) {
-                const now = Date.now();
-                seq.IndexOnTimestamp[now] = seq.length;
-                seq.TimestampOnIndex[seq.length] = now;
+                seq.IndexOnTimestamp[seq.T] = seq.length;
+                seq.TimestampOnIndex[seq.length] = seq.T;
                 seq[seq.length] = seq.valOnT;
               }
               if (seq.done === 0) {
@@ -74,15 +74,6 @@
         }
       });
 
-    Object.defineProperties(seq,
-      {
-        T: { //foo.T
-          get() {
-            return Date.now();
-          }
-        }
-      });
-
     return seq;
   };
   //==================
@@ -91,9 +82,9 @@
   //--------------------------------------
   __.api.__ = ((__, seq, store) => {
     return ((f) => {
-      const __pedSeq = __([seq], store);
-      __pedSeq.eq = (t) => (f(t));
-      return __pedSeq;
+      const __newSeq = __([seq], store);
+      __newSeq.eq = (val) => (f(val, seq.T));
+      return __newSeq;
     });
   });
 

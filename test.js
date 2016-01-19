@@ -55,6 +55,16 @@
         __a.t = 1; // the whole val will be updated
         __.log.t = __a.T;
 
+        setTimeout(() => {
+          __.log.t = __a.T;
+
+          const __x = __a.__((a, t) => {
+            __.log.t = "-----";
+            __.log.t = t;
+          });
+          __a.t = 2;
+          __.log.t = __a.T;
+        }, 10);
       /* //ERROR!
       //cannot set a value on sequence that depends on other sequences
 
