@@ -73,6 +73,16 @@
           }
         }
       });
+
+    Object.defineProperties(seq,
+      {
+        T: { //foo.T
+          get() {
+            return Date.now();
+          }
+        }
+      });
+
     return seq;
   };
   //==================
@@ -82,8 +92,7 @@
   __.api.__ = ((__, seq, store) => {
     return ((f) => {
       const __pedSeq = __([seq], store);
-      const t0 = Date.now();
-      __pedSeq.eq = (t) => (f(t, t0));
+      __pedSeq.eq = (t) => (f(t));
       return __pedSeq;
     });
   });
@@ -103,7 +112,7 @@
     });
   });
 
-  __.api.T = ((__, seq, store) => {
+  __.api.onT = ((__, seq, store) => {
     return ((timestamp) => {
       if (store) {
         return (seq[seq.IndexOnTimestamp[timestamp]]);
@@ -139,7 +148,7 @@
 
   Object.defineProperties(__,
     {
-      t: {
+      T: {
         get() {
           return Date.now();
         },

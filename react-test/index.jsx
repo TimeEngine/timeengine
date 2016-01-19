@@ -15,7 +15,7 @@
 
     const __seqEl = __([__value])
       .__(([value]) => (<div>
-        <input type="text" value={value} onChange={onChange}/>
+      <input type="text" value={value} onChange={onChange}/>
         </div>));
 
     __value.t = "default text";
@@ -29,7 +29,7 @@
     return __Component(__
       .intervalSeq(Immutable.Range(), 1000)
       .__((count) => (__.log.t = count)) //console.log
-      .__((count) => (<div>Timer : {count}</div>)));
+      .__((count) => (<div>{"Timer : "}{count}</div>)));
   };
 
   // memory leak, performance issue
@@ -50,9 +50,9 @@
       .__(init);
     return (<span>
              <button
-      onClick={() => (__updn.t = 1)}>Up</button>
+      onClick={() => (__updn.t = 1)}>{"Up"}</button>
              <button
-      onClick={() => (__updn.t = -1)}>Down</button>
+      onClick={() => (__updn.t = -1)}>{"Down"}</button>
              &nbsp;&nbsp;{__Component(__seqEl)}&nbsp;&nbsp;
             </span>);
   };
@@ -70,7 +70,7 @@
       .__(() => (<span>{CounterComponentStateHistory()}</span>));
     return (<div>
             {__Component(__seqEl)}
-           <button onClick={onClick}>Reload</button>
+           <button onClick={onClick}>{"Reload"}</button>
           </div>);
   };
 
@@ -88,12 +88,12 @@
       .__(init);
     return (<div>
            <button
-      onClick={() => (__updn.t = 1)}>Up</button>
+      onClick={() => (__updn.t = 1)}>{"Up"}</button>
            <button
-      onClick={() => (__updn.t = -1)}>Down</button>
+      onClick={() => (__updn.t = -1)}>{"Down"}</button>
            &nbsp;&nbsp;{__Component(__seqEl)}&nbsp;&nbsp;
            <button
-      onClick={init}>Reset</button>
+      onClick={init}>{"Reset"}</button>
           </div>);
   };
 
@@ -124,7 +124,7 @@
       .__(([x, y]) => (
       <div>
         <svg height = "250"  width = "100%">
-            <circle r="3" fill="red"
+            <circle r="2" fill="red"
         cx = {50 + x * Drawscale} cy = {250 - y * Drawscale}/>
         </svg>
       </div>));
@@ -141,28 +141,28 @@
       .__(() => (<div>{PhysicsComponent()}</div>));
 
     return (<div>
-      <div><button onClick={onClick}>Physics Start</button></div>
+      <div><button onClick={onClick}>{"Physics Start"}</button></div>
       {__Component(__seqEl)}
-      </div>
+           </div>
       );
   };
 
+
   const TopElement = (
   <div>
-      <p>HelloElement!!</p>
-
+     <p>{"HelloElement!!"}</p>
       {TextComponent()}
-      =====================
+      {"====================="}
       {TimerComponent()}
-      =====================
+      {"====================="}
       <div>{CounterComponentStateHistory()}</div>
-      =====================
+      {"====================="}
       {CounterReloadComponent()}
-      =====================
+      {"====================="}
       {CounterComponent()}
-      =====================
+      {"====================="}
       {ButtonComponent()}
-      =====================
+      {"====================="}
   </div>
   );
 

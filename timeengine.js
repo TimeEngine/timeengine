@@ -88,6 +88,16 @@
         }
       }
     });
+
+    Object.defineProperties(seq, {
+      T: { //foo.T
+
+        get: function get() {
+          return Date.now();
+        }
+      }
+    });
+
     return seq;
   };
   //==================
@@ -97,9 +107,8 @@
   __.api.__ = function (__, seq, store) {
     return function (f) {
       var __pedSeq = __([seq], store);
-      var t0 = Date.now();
       __pedSeq.eq = function (t) {
-        return f(t, t0);
+        return f(t);
       };
       return __pedSeq;
     };
@@ -120,7 +129,7 @@
     };
   };
 
-  __.api.T = function (__, seq, store) {
+  __.api.onT = function (__, seq, store) {
     return function (timestamp) {
       if (store) {
         return seq[seq.IndexOnTimestamp[timestamp]];
@@ -159,7 +168,7 @@
   };
 
   Object.defineProperties(__, {
-    t: {
+    T: {
       get: function get() {
         return Date.now();
       },

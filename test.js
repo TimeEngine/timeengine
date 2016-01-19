@@ -53,6 +53,7 @@
 
 
         __a.t = 1; // the whole val will be updated
+        __.log.t = __a.T;
 
       /* //ERROR!
       //cannot set a value on sequence that depends on other sequences
@@ -64,6 +65,43 @@
 
 
   })();
+
+
+  (() => {
+    const __delay = __
+      .intervalSeq(Immutable
+        .Seq.of("----------------------------------"), 1100)
+      .log()
+      .__(() => {
+        // Single (no duplicate) update by dependency analysis
+        const __a = __();
+        const __log1 = __a.log('__a');
+        const __b = __();
+        const __log2 = __b.log('__b');
+        const __c = __([__a]).__(([a]) => a);
+        const __log3 = __c.log('__c');
+        const __d = __([__a, __b, __c]).__(([a, b, c]) => a + b + c);
+        const __log4 = __d.log('__d');
+        __a.t = 1;
+        __a.t = 2;
+        __b.t = 1;
+        __b.t = 3;
+        __a.t = 3;
+      /* //ERROR!
+      //cannot set a value on sequence that depends on other sequences
+
+            __c.t = 5;
+
+      */
+      });
+
+
+  })();
+
+
+
+
+
   /*
     const loop = Immutable.Range(0, 10) //loop 10 times
       .map((c) => (__.log.t = c))
