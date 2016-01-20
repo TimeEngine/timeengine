@@ -48,18 +48,18 @@
               throw new Error("cannot set a value on sequence that depends on other sequences");
             } else {
               seq.propagating = 0;
-              seq.valOnT = tval;
-              seq.T = Date.now();
-              if (store) {
-                seq.IndexOnTimestamp[seq.T] = seq.length;
-                seq.TimestampOnIndex[seq.length] = seq.T;
-                seq[seq.length] = seq.valOnT;
-              }
               if (seq.done === 0) {
+                seq.valOnT = tval;
+                seq.evalEqs(tval); //self eqs eval
+                seq.T = Date.now();
+                if (store) {
+                  seq.IndexOnTimestamp[seq.T] = seq.length;
+                  seq.TimestampOnIndex[seq.length] = seq.T;
+                  seq[seq.length] = seq.valOnT; //after funcs
+                }
                 Object.keys(seq.updatedFor).map((key) => {
                   seq.updatedFor[key] = 1;
                 });
-                seq.evalEqs(tval); //self eqs eval
                 seq.ds.map((d) => { //clear updated ds in non-interference way
                   d.updatedFor[seq.id] = 0;
                 });

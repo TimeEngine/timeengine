@@ -32,6 +32,27 @@
   (() => {
     const __delay = __
       .intervalSeq(Immutable
+        .Seq.of("----------------------------------"), 120)
+      .log()
+      .__(() => {
+        const __a = __(true); //constructor
+        const __b = __([__a], true)
+          .__(([a]) => (a + 1));
+
+        const __log1 = __a.log("__a");
+        const __log2 = __b.log("__b");
+        __a.t = 1;
+        __a.t = 10;
+        __a.t = 100;
+
+        __.log.t = __a.map((t) => (t));
+        __.log.t = __b.map((t) => (t));
+      });
+  })();
+
+  (() => {
+    const __delay = __
+      .intervalSeq(Immutable
         .Seq.of("----------------------------------"), 150)
       .log()
       .__(() => {
