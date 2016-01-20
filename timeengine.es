@@ -59,9 +59,8 @@
                 Object.keys(seq.updatedFor).map((key) => {
                   seq.updatedFor[key] = 1;
                 });
-                seq.ds.map((d) => { //clear updated ds in non-interference way
-                  d.updatedFor[seq.id] = 0;
-                });
+                //clear updated ds in non-interference way
+                seq.ds.map((d) => (d.updatedFor[seq.id] = 0));
                 seq.us.map((u) => {
                   const dsAllUpdated = u.ds
                     .map((d) => (d.updatedFor[u.id]))
