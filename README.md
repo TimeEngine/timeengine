@@ -19,9 +19,10 @@
 
 [![NPM](https://nodei.co/npm/timeengine.png?downloads=true)](https://nodei.co/npm/timeengine/)
 
-See the Documentation of the project:
+See the Documentation of the project: (!! the documentation on the way !!)
 
 [http://timeengine.github.io](http://timeengine.github.io)
+
 
 From version 5.0.0, the project repository has moved to
 

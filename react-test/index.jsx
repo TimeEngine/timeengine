@@ -37,16 +37,18 @@
   // to calculate many elemnents of the long array
   const CounterComponentStateHistory = () => {
     const __updn = __(true); //1 or -1 or initially 0
-    const __count = __updn
-      .__((updn) => (__updn
+    const __count = __([__updn])
+      .__(([updn]) => (__updn
           .reduce((a, b) => (a + b)))); //js Array.reduce
-    const __seqEl = __count
-      .__((count) => (<span>{count}</span>));
+    const __seqEl = __([__count])
+      .__(([count]) => (<span>{count}</span>));
+
     const init = () => {
       __updn.t = 0; //just trigger to view the init
     };
     const __runNow = __
-      .intervalSeq(Immutable.Range(0, 1), 0)
+      .intervalSeq(Immutable.Seq
+        .of("----------------------------------"), 0)
       .__(init);
     return (<span>
              <button
@@ -64,7 +66,8 @@
       __clicked.t = true;
     };
     const __runNow = __
-      .intervalSeq(Immutable.Range(0, 1), 0)
+      .intervalSeq(Immutable.Seq
+        .of("----------------------------------"), 0)
       .__(onClick);
     const __seqEl = __([__clicked])
       .__(() => (<span>{CounterComponentStateHistory()}</span>));
@@ -75,17 +78,20 @@
   };
 
   const CounterComponent = () => {
-    const __updn = __(); //1 or -1 or initially 0
     const __count = __();
-    __updn.__((updn) => (__count.t += updn));
-    const __seqEl = __count
-      .__((count) => (<span>{count}</span>));
     const init = () => {
       __count.t = 0; //initial value of count
     };
     const __runNow = __
-      .intervalSeq(Immutable.Range(0, 1), 0)
+      .intervalSeq(Immutable.Seq
+        .of("----------------------------------"), 0)
       .__(init);
+    const __updn = __()
+      .__((updn) => {
+        __count.t += updn;
+      });
+    const __seqEl = __([__count])
+      .__(([count]) => (<span>{count}</span>));
     return (<div>
            <button
       onClick={() => (__updn.t = 1)}>{"Up"}</button>
@@ -116,8 +122,8 @@
     const t = __
       .intervalSeq(Immutable.Range(), 10)
       .__((count) => (count * 10 / 1000));
-    const x = t.__((t) => V0 * Math.cos(THETA) * t);
-    const y = t.__((t) => V0 * Math.sin(THETA) * t - 1 / 2 * G * Math.pow(t, 2));
+    const x = __([t]).__(([t]) => V0 * Math.cos(THETA) * t);
+    const y = __([t]).__(([t]) => V0 * Math.sin(THETA) * t - 1 / 2 * G * Math.pow(t, 2));
     //==================================
     const Drawscale = 1; //1 dot = 1 meter
     const __seqEl = __([x, y]) //atomic update
@@ -136,7 +142,6 @@
     const onClick = () => {
       __clicked.t = true;
     };
-
     const __seqEl = __([__clicked])
       .__(() => (<div>{PhysicsComponent()}</div>));
 
@@ -146,7 +151,6 @@
            </div>
       );
   };
-
 
   const TopElement = (
   <div>

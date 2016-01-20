@@ -25,11 +25,6 @@
     seq.us = [];
     seq.ds = ds;
     seq.updatedFor = {};
-    seq.eq = function () {
-      return seq.ds.map(function (d) {
-        return d.t;
-      });
-    };
     seq.ds.map(function (d) {
       // add self seq to us Array of d
       d.us[d.us.length] = seq;
@@ -39,7 +34,17 @@
     seq.TimestampOnIndex = {};
     seq.propagating = 0;
     seq.done = 0;
-    //-----------------
+    seq.eqs = [];
+    seq.addEq = function (eq) {
+      return seq.eqs[seq.eqs.length] = eq;
+    };
+    seq.evalEqs = function (value) {
+      var val = value;
+      seq.eqs.map(function (eq) {
+        return seq.valOnT = val = eq(val);
+      });
+    };
+    //api-----------------
     Object.keys(__.api).map(function (api) {
       seq[api] = __.api[api](__, seq, store);
     });
@@ -52,8 +57,8 @@
           return seq.valOnT;
         },
         set: function set(tval) {
-          //sanity check
-          if (seq.propagating === 0 && seq.ds.length !== 0) {
+          if (seq.propagating === 0 && //sanity check
+          seq.ds.length !== 0) {
             throw new Error("cannot set a value on sequence that depends on other sequences");
           } else {
             seq.propagating = 0;
@@ -68,6 +73,11 @@
               Object.keys(seq.updatedFor).map(function (key) {
                 seq.updatedFor[key] = 1;
               });
+              seq.evalEqs(tval); //self eqs eval
+              seq.ds.map(function (d) {
+                //clear updated ds in non-interference way
+                d.updatedFor[seq.id] = 0;
+              });
               seq.us.map(function (u) {
                 var dsAllUpdated = u.ds.map(function (d) {
                   return d.updatedFor[u.id];
@@ -76,10 +86,8 @@
                 });
                 if (dsAllUpdated === 1) {
                   u.propagating = 1;
-                  u.t = u.eq(tval); //propagate
-                  //clear updated ds in non-interference way
-                  u.ds.map(function (d) {
-                    d.updatedFor[u.id] = 0;
+                  u.t = u.ds.map(function (d) {
+                    return d.t;
                   });
                 }
               });
@@ -88,26 +96,23 @@
         }
       }
     });
-
     return seq;
   };
   //==================
-
   __.api = {};
   //--------------------------------------
   __.api.__ = function (__, seq, store) {
     return function (f) {
-      var __newSeq = __([seq], store);
-      __newSeq.eq = function (val) {
+      seq.addEq(function (val) {
         return f(val, seq.T);
-      };
-      return __newSeq;
+      });
+      return seq;
     };
   };
 
   __.api.log = function (__, seq, store) {
     return function (msg) {
-      seq.__(function (val) {
+      seq.addEq(function (val) {
         if (typeof msg === "undefined") {
           console.log(val);
           return val;
@@ -131,9 +136,8 @@
   };
 
   //top level api
-  __.log = __([], true);
-  __.log.__(function (val) {
-    console.info(val);
+  __.log = __([], true).__(function (val) {
+    console.info(">>> ", val);
     return val;
   });
 
@@ -183,10 +187,10 @@
     return f;
   };
   //------------------
-
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = __;
   } else {
     window.__ = __;
   }
+  //============================
 })();

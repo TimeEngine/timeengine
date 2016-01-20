@@ -3,129 +3,132 @@
 
   const __ = require('./timeengine.js');
   const Immutable = require('immutable');
+
+
   (() => {
     const __delay = __
       .intervalSeq(Immutable
-        .Seq.of('timeengine test started...'), 0)
+        .Seq.of("##### timeengine Test Started #####"), 0)
       .log();
+
   })();
+
   (() => {
     const __delay = __
       .intervalSeq(Immutable
-        .Seq.of("----------------------------------"), 500)
+        .Seq.of("----------------------------------"), 100)
       .log()
       .__(() => {
-        const __x = __();
-        const __log1 = __x.log('x');
+        const __a = __(); //constructor
+        const __b = __([__a])
+          .__(([a]) => (a + 1));
 
-        const __y = __x.__((x) => (x + 1));
-        const __log2 = __y.log('y');
-        __x.t = 1;
+        const __log1 = __a.log("__a");
+        const __log2 = __b.log("__b");
+        __a.t = 1;
       });
   })();
 
-
   (() => {
     const __delay = __
       .intervalSeq(Immutable
-        .Seq.of("----------------------------------"), 1000)
+        .Seq.of("----------------------------------"), 150)
+      .log()
+      .__(() => {
+        const __a = __();
+        const __b = __();
+        const __c = __();
+
+        const __ab = __([__a, __b]).__(([a, b]) => (a * b));
+        const __bc = __([__b, __c]).__(([b, c]) => (b * c));
+
+        const __log1 = __a.log("__a");
+        const __log2 = __b.log("__b");
+        const __log3 = __c.log("__c");
+        const __log4 = __ab.log("__ab");
+        const __log5 = __bc.log("__bc");
+
+        __a.t = 2;
+        __b.t = 3; //__b update is managed in non-interference way
+        __c.t = 5;
+
+      });
+  })();
+  (() => {
+    const __delay = __
+      .intervalSeq(Immutable
+        .Seq.of("----------------------------------"), 200)
       .log()
       .__(() => {
         // Single (no duplicate) update by dependency analysis
         const __a = __();
-        const __log1 = __a.log('__a');
-
         const __b = __([__a]).__(([a]) => a * 2);
-        const __log2 = __b.log('__b'); // b.t = 1 * 2 = 2
-
         const __c = __([__a, __b]).__(([a, b]) => a + b * 3);
-        const __log3 = __c.log('__c'); // c.t = 1 + 2 * 3 = 7
-
         const __d = __([__b]).__(([b]) => b * 100);
-        const __log4 = __d.log('__d'); // d.t = 2 * 100 = 200
-
         const __e = __([__a, __b, __c, __d])
           .__(([a, b, c, d]) => a + b + c + d);
-        const __log5 = __e.log('__e'); //210
-
         const __atomic = __([__a, __b, __c, __d, __e]);
+
+        const __log1 = __a.log('__a');
+        const __log2 = __b.log('__b'); // b.t = 1 * 2 = 2
+        const __log3 = __c.log('__c'); // c.t = 1 + 2 * 3 = 7
+        const __log4 = __d.log('__d'); // d.t = 2 * 100 = 200
+        const __log5 = __e.log('__e'); //210
         const __log6 = __atomic.log('__atomic');
 
-
         __a.t = 1; // the whole val will be updated
-        __.log.t = __a.T;
+        __a.t = 2;
+        /* //ERROR!
+        //cannot set a value on sequence that depends on other sequences
+              __b.t = 99;
+        */
 
-        setTimeout(() => {
-          __.log.t = __a.T;
-
-          const __x = __a.__((a, t) => {
-            __.log.t = "-----";
-            __.log.t = t;
-          });
-          __a.t = 2;
-          __.log.t = __a.T;
-        }, 10);
-      /* //ERROR!
-      //cannot set a value on sequence that depends on other sequences
-
-            __b.t = 99;
-
-      */
       });
 
-
   })();
-
 
   (() => {
     const __delay = __
       .intervalSeq(Immutable
-        .Seq.of("----------------------------------"), 1100)
+        .Seq.of("----------------------------------"), 300)
       .log()
       .__(() => {
         // Single (no duplicate) update by dependency analysis
         const __a = __();
-        const __log1 = __a.log('__a');
         const __b = __();
-        const __log2 = __b.log('__b');
         const __c = __([__a]).__(([a]) => a);
+        const __abc = __([__a, __b, __c])
+          .__(([a, b, c]) => a + b + c);
+
+        const __log1 = __a.log('__a');
+        const __log2 = __b.log('__b');
         const __log3 = __c.log('__c');
-        const __d = __([__a, __b, __c]).__(([a, b, c]) => a + b + c);
-        const __log4 = __d.log('__d');
+        const __log4 = __abc.log('__abc');
         __a.t = 1;
         __a.t = 2;
         __b.t = 1;
         __b.t = 3;
         __a.t = 3;
-      /* //ERROR!
-      //cannot set a value on sequence that depends on other sequences
 
-            __c.t = 5;
-
-      */
       });
-
 
   })();
 
 
-
-
-
   /*
     const loop = Immutable.Range(0, 10) //loop 10 times
-      .map((c) => (__.log.t = c))
-      .toArray(); //lazy Seq toArray to compute
+.map((c) => (__.log.t = c))
+.toArray(); //lazy Seq toArray to compute
 
 
     const timerts = __.intervalSeq(Immutable.Range(0, 5), 1000)
-      .log(">>>");
+.log(">>>");
   */
 
   (() => {
     const __delay = __
       .intervalSeq(Immutable
-        .Seq.of("----------------------------------"), 1500)
+        .Seq.of("----------------------------------"), 400)
       .log()
       .__(() => {
         const p = new Promise((resolve, reject) => {
@@ -148,7 +151,7 @@
   (() => {
     const __delay = __
       .intervalSeq(Immutable
-        .Seq.of("----------------------------------"), 2000)
+        .Seq.of("----------------------------------"), 500)
       .log()
       .__(() => {
         const __p = __();
@@ -171,7 +174,7 @@
   (() => {
     const __delay = __
       .intervalSeq(Immutable
-        .Seq.of("----------------------------------"), 2500)
+        .Seq.of("----------------------------------"), 600)
       .log()
       .__(() => {
         const __p = __();
@@ -195,7 +198,7 @@
   (() => {
     const __delay = __
       .intervalSeq(Immutable
-        .Seq.of("----------------------------------"), 3000)
+        .Seq.of("----------------------------------"), 700)
       .log()
       .__(() => {
         const PromiseCreateFunc = (value, time) => {
@@ -207,9 +210,9 @@
           return promise;
         };
 
-        var promise0 = PromiseCreateFunc("aaaaa", 3000);
-        var promise1 = PromiseCreateFunc("bbbbb", 1000);
-        var promise2 = PromiseCreateFunc("ccccc", 2000);
+        var promise0 = PromiseCreateFunc("aaaaa", 300);
+        var promise1 = PromiseCreateFunc("bbbbb", 100);
+        var promise2 = PromiseCreateFunc("ccccc", 200);
         var promiseAll = Promise.all([promise0, promise1, promise2]);
 
         promiseAll.then((value) => {
@@ -221,19 +224,19 @@
   (() => {
     const __delay = __
       .intervalSeq(Immutable
-        .Seq.of("----------------------------------"), 8000)
+        .Seq.of("----------------------------------"), 1200)
       .log()
       .__(() => {
 
         const __a = __
           .intervalSeq(Immutable
-            .Seq.of("aaaaa"), 3000);
+            .Seq.of("aaaaa"), 300);
         const __b = __
           .intervalSeq(Immutable
-            .Seq.of("bbbbb"), 1000);
+            .Seq.of("bbbbb"), 100);
         const __c = __
           .intervalSeq(Immutable
-            .Seq.of("ccccc"), 2000);
+            .Seq.of("ccccc"), 200);
 
         const promiseAll = __([__a, __b, __c]);
 

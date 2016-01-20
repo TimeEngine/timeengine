@@ -17,7 +17,6 @@
     seq.us = [];
     seq.ds = ds;
     seq.updatedFor = {};
-    seq.eq = () => (seq.ds.map((d) => (d.t)));
     seq.ds.map((d) => { // add self seq to us Array of d
       d.us[d.us.length] = seq;
       d.updatedFor[seq.id] = 0; // non-interference dependency
@@ -26,7 +25,13 @@
     seq.TimestampOnIndex = {};
     seq.propagating = 0;
     seq.done = 0;
-    //-----------------
+    seq.eqs = [];
+    seq.addEq = (eq) => (seq.eqs[seq.eqs.length] = eq);
+    seq.evalEqs = (value) => {
+      let val = value;
+      seq.eqs.map((eq) => (seq.valOnT = val = eq(val)));
+    };
+    //api-----------------
     Object.keys(__.api).map((api) => {
       seq[api] = __.api[api](__, seq, store);
     });
@@ -38,8 +43,7 @@
             return seq.valOnT;
           },
           set(tval) {
-            //sanity check
-            if ((seq.propagating === 0)
+            if ((seq.propagating === 0) //sanity check
               && (seq.ds.length !== 0)) {
               throw new Error("cannot set a value on sequence that depends on other sequences");
             } else {
@@ -55,17 +59,17 @@
                 Object.keys(seq.updatedFor).map((key) => {
                   seq.updatedFor[key] = 1;
                 });
+                seq.evalEqs(tval); //self eqs eval
+                seq.ds.map((d) => { //clear updated ds in non-interference way
+                  d.updatedFor[seq.id] = 0;
+                });
                 seq.us.map((u) => {
                   const dsAllUpdated = u.ds
                     .map((d) => (d.updatedFor[u.id]))
                     .reduce((a, b) => (a * b));
                   if (dsAllUpdated === 1) {
                     u.propagating = 1;
-                    u.t = u.eq(tval); //propagate
-                    //clear updated ds in non-interference way
-                    u.ds.map((d) => {
-                      d.updatedFor[u.id] = 0;
-                    });
+                    u.t = u.ds.map((d) => (d.t));
                   }
                 });
               }
@@ -73,24 +77,21 @@
           }
         }
       });
-
     return seq;
   };
   //==================
-
   __.api = {};
   //--------------------------------------
   __.api.__ = ((__, seq, store) => {
     return ((f) => {
-      const __newSeq = __([seq], store);
-      __newSeq.eq = (val) => (f(val, seq.T));
-      return __newSeq;
+      seq.addEq((val) => (f(val, seq.T)));
+      return seq;
     });
   });
 
   __.api.log = ((__, seq, store) => {
     return ((msg) => {
-      seq.__((val) => {
+      seq.addEq((val) => {
         if (typeof msg === "undefined") {
           console.log(val);
           return val;
@@ -114,11 +115,11 @@
   });
 
   //top level api
-  __.log = __([], true);
-  __.log.__((val) => {
-    console.info(val);
-    return val;
-  });
+  __.log = __([], true)
+    .__((val) => {
+      console.info(">>> ", val);
+      return val;
+    });
 
   __.intervalSeq = (immutableSeq, interval, store = false) => {
     const seq = __([], store);
@@ -159,11 +160,10 @@
     return f;
   };
   //------------------
-
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = __;
   } else {
     window.__ = __;
   }
-
+//============================
 })();
