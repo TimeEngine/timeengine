@@ -37,18 +37,13 @@
   // to calculate many elemnents of the long array
   const CounterComponentStateHistory = () => {
     const __updn = __(true); //1 or -1 or initially 0
-    const __count = __([__updn])
+    const __seqEl = __([__updn])
       .__(([updn]) => (__updn
-          .reduce((a, b) => (a + b)))); //js Array.reduce
-    const __seqEl = __([__count])
-      .__(([count]) => (<span>{count}</span>));
-
-    const init = () => {
-      __updn.t = 0; //just trigger to view the init
-    };
+          .reduce((a, b) => (a + b)))) //js Array.reduce
+      .__((count) => (<span>{count}</span>));
+    const init = () => (__updn.t = 0); //just trigger to view the init
     const __runNow = __
-      .intervalSeq(Immutable.Seq
-        .of("----------------------------------"), 0)
+      .intervalSeq(Immutable.Seq.of(true), 0)
       .__(init);
     return (<span>
              <button
@@ -66,8 +61,7 @@
       __clicked.t = true;
     };
     const __runNow = __
-      .intervalSeq(Immutable.Seq
-        .of("----------------------------------"), 0)
+      .intervalSeq(Immutable.Seq.of(true), 0)
       .__(onClick);
     const __seqEl = __([__clicked])
       .__(() => (<span>{CounterComponentStateHistory()}</span>));
@@ -78,18 +72,13 @@
   };
 
   const CounterComponent = () => {
-    const __count = __();
-    const init = () => {
-      __count.t = 0; //initial value of count
-    };
+    const __updn = __();
+    const __count = __([__updn])
+      .__(([updn]) => ((updn === 0) ? (0) : (__count.t + updn)));
+    const init = () => (__updn.t = 0); //initial value of count
     const __runNow = __
-      .intervalSeq(Immutable.Seq
-        .of("----------------------------------"), 0)
+      .intervalSeq(Immutable.Seq.of(true), 0)
       .__(init);
-    const __updn = __()
-      .__((updn) => {
-        __count.t += updn;
-      });
     const __seqEl = __([__count])
       .__(([count]) => (<span>{count}</span>));
     return (<div>
@@ -110,15 +99,12 @@
   //3. Integirity between sequences is guranteed by dependency system.
 
   const PhysicsComponent = () => {
-    //-------Physics-------------------------------
     //MKS system of units
     const V0 = 85.0; // m/s
     const DEG = 40; //degree
     const THETA = DEG / 180 * Math.PI; //radian
     const G = 9.8; //gravity const
-
-    //10msec time resolution
-    //t seconds elapsed
+    //t seconds elapsed 0msec time resolution
     const t = __
       .intervalSeq(Immutable.Range(), 10)
       .__((count) => (count * 10 / 1000));
