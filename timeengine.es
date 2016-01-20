@@ -27,9 +27,9 @@
     seq.done = 0;
     seq.eqs = [];
     seq.addEq = (eq) => (seq.eqs[seq.eqs.length] = eq);
-    seq.evalEqs = (value) => {
-      let val = value;
-      seq.eqs.map((eq) => (seq.valOnT = val = eq(val)));
+    seq.evalEqs = (val) => {
+      seq.eqs.map((eq) => (val = eq(val)));
+      return val;
     };
     //api-----------------
     Object.keys(__.api).map((api) => {
@@ -49,8 +49,7 @@
             } else {
               seq.propagating = 0;
               if (seq.done === 0) {
-                seq.valOnT = tval;
-                seq.evalEqs(tval); //self eqs eval
+                seq.valOnT = seq.evalEqs(tval); //self eqs eval
                 seq.T = Date.now();
                 if (store) {
                   seq.IndexOnTimestamp[seq.T] = seq.length;

@@ -38,11 +38,11 @@
     seq.addEq = function (eq) {
       return seq.eqs[seq.eqs.length] = eq;
     };
-    seq.evalEqs = function (value) {
-      var val = value;
+    seq.evalEqs = function (val) {
       seq.eqs.map(function (eq) {
-        return seq.valOnT = val = eq(val);
+        return val = eq(val);
       });
+      return val;
     };
     //api-----------------
     Object.keys(__.api).map(function (api) {
@@ -63,8 +63,7 @@
           } else {
             seq.propagating = 0;
             if (seq.done === 0) {
-              seq.valOnT = tval;
-              seq.evalEqs(tval); //self eqs eval
+              seq.valOnT = seq.evalEqs(tval); //self eqs eval
               seq.T = Date.now();
               if (store) {
                 seq.IndexOnTimestamp[seq.T] = seq.length;
