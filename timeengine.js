@@ -73,9 +73,9 @@
               Object.keys(seq.updatedFor).map(function (key) {
                 seq.updatedFor[key] = 1;
               });
+              //clear updated ds in non-interference way
               seq.ds.map(function (d) {
-                //clear updated ds in non-interference way
-                d.updatedFor[seq.id] = 0;
+                return d.updatedFor[seq.id] = 0;
               });
               seq.us.map(function (u) {
                 var dsAllUpdated = u.ds.map(function (d) {
