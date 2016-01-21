@@ -17,13 +17,12 @@
 
 [david-dm-dev-image]:https://david-dm.org/kenokabe/timeengine/dev-status.svg
 
-[![NPM](https://nodei.co/npm/timeengine.png?downloads=true)](https://nodei.co/npm/timeengine/)
-
-See the Documentation of the project: (!! the documentation on the way !!)
-
-[http://timeengine.github.io](http://timeengine.github.io)
-
-
-From version 5.0.0, the project repository has moved to
+[https://www.npmjs.com/package/timeengine](https://www.npmjs.com/package/timeengine)
 
 [https://github.com/TimeEngine/timeengine](https://github.com/TimeEngine/timeengine)
+
+From version 5.0.0, the project repository has moved to the project page.
+
+## See the Demo and Documentation of the project:
+
+## [http://timeengine.github.io](http://timeengine.github.io)

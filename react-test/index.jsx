@@ -92,11 +92,7 @@
           </div>);
   };
 
-  //to copy to document
-  //__count.t += updn is deistructive operation!?
-  //1. __count is const and immutable sequence
-  //2. t (time index) is conceptually different before and after the operation, so __count.t is different and immutable  before and after the operation
-  //3. Integirity between sequences is guranteed by dependency system.
+
 
   const PhysicsComponent = () => {
     //MKS system of units

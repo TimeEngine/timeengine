@@ -20,11 +20,12 @@
       .log()
       .__(() => {
         const __a = __(); //constructor
-        const __b = __([__a])
-          .__(([a]) => (a + 1));
+        const __b = __([__a]) //constructor
+          .__(([a]) => (a + 1)); //
 
         const __log1 = __a.log("__a");
         const __log2 = __b.log("__b");
+
         __a.t = 1;
       });
   })();
@@ -49,6 +50,28 @@
         __.log.t = __b.map((t) => (t));
       });
   })();
+
+
+  (() => {
+    const __delay = __
+      .intervalSeq(Immutable
+        .Seq.of("----------------------------------"), 130)
+      .log()
+      .__(() => {
+        const __a = __();
+        const __b = __();
+        const __c = __([__a, __b]).__(([a, b]) => (a + b));
+
+        const __log1 = __a.log("__a");
+        const __log2 = __b.log("__b");
+        const __log3 = __c.log("__c");
+
+        __a.t = 2;
+        __b.t = 3;
+      });
+  })();
+
+
 
   (() => {
     const __delay = __

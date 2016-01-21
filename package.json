@@ -1,6 +1,6 @@
 {
   "name": "timeengine",
-  "version": "6.1.3",
+  "version": "6.1.4",
   "description": "TimeEngine is a tiny, simple yet versatile library that provides first class reactive components with smart dependency resolving capability in JavaScript. Built for a new programming paradigm: Dependency driven Functional Reactive Programming (DFRP).",
   "main": "timeengine.js",
   "scripts": {
