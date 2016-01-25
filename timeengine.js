@@ -1,7 +1,7 @@
 "use strict";
 
 (function () {
-  'use strict';
+  'dse strict';
 
   var getID = function (id0) {
     var id = id0;
@@ -10,25 +10,26 @@
     };
   }(0);
   //-----------------------------------
-  //__([a,b], true) // new seq depends on ds =[a,b]
+  //__([a,b], true) // new seq depenus on us =[a,b]
   var __ = function __() {
-    var ds = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+    var us = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
     var store = arguments.length <= 1 || arguments[1] === undefined ? false : arguments[1];
 
-    if (typeof ds === "boolean") {
-      store = ds;
-      ds = [];
+    if (typeof us === "boolean") {
+      store = us;
+      us = [];
     }
     var seq = []; //seq is vanilla JS array + features
     seq.id = getID();
     seq.store = store;
-    seq.us = [];
-    seq.ds = ds;
-    seq.updatedFor = {};
-    seq.ds.map(function (d) {
-      // add self seq to us Array of d
-      d.us[d.us.length] = seq;
-      d.updatedFor[seq.id] = 0; // non-interference dependency
+    seq.us = us;
+    seq.ds = [];
+
+    seq.updatedTo = {};
+    seq.us.map(function (u) {
+      // add self seq to ds Array of d
+      u.ds[u.ds.length] = seq;
+      u.updatedTo[seq.id] = 0; // non-interference dependency
     });
     seq.IndexOnTimestamp = {};
     seq.TimestampOnIndex = {};
@@ -58,8 +59,8 @@
         },
         set: function set(tval) {
           if (seq.propagating === 0 && //sanity check
-          seq.ds.length !== 0) {
-            throw new Error("cannot set a value on sequence that depends on other sequences");
+          seq.us.length !== 0) {
+            throw new Error("cannot set a value on sequence that depenus on other sequences");
           } else {
             seq.propagating = 0;
             if (seq.done === 0) {
@@ -70,23 +71,23 @@
                 seq.TimestampOnIndex[seq.length] = seq.T;
                 seq[seq.length] = seq.valOnT; //after funcs
               }
-              Object.keys(seq.updatedFor).map(function (key) {
-                seq.updatedFor[key] = 1;
+              Object.keys(seq.updatedTo).map(function (key) {
+                seq.updatedTo[key] = 1;
               });
-              //clear updated ds in non-interference way
-              seq.ds.map(function (d) {
-                return d.updatedFor[seq.id] = 0;
-              });
+              //clear updated us in non-interference way
               seq.us.map(function (u) {
-                var dsAllUpdated = u.ds.map(function (d) {
-                  return d.updatedFor[u.id];
+                return u.updatedTo[seq.id] = 0;
+              });
+              seq.ds.map(function (d) {
+                var usAllUpdated = d.us.map(function (u) {
+                  return u.updatedTo[d.id];
                 }).reduce(function (a, b) {
                   return a * b;
                 });
-                if (dsAllUpdated === 1) {
-                  u.propagating = 1;
-                  u.t = u.ds.map(function (d) {
-                    return d.t;
+                if (usAllUpdated === 1) {
+                  d.propagating = 1;
+                  d.t = d.us.map(function (u) {
+                    return u.t;
                   });
                 }
               });

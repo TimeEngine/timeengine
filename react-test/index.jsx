@@ -25,12 +25,10 @@
   // `.intervalSeq` is to map Immutable-js infinite Sequence
   //                       on TimeEngine infinite Sequence
   // map natural numbers sequence on intervalSeq(1000)
-  const TimerElement = () => {
-    return __Element(__
+  const TimerElement = () => __Element(__
       .intervalSeq(Immutable.Range(), 1000)
       .__((count) => (__.log.t = count)) //console.log
       .__((count) => (<div>{"Timer : "}{count}</div>)));
-  };
 
   // memory leak, performance issue
   //how about games? memoized_reduce is needed

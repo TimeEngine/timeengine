@@ -1,25 +1,26 @@
 (() => {
-  'use strict';
+  'dse strict';
   const getID = ((id0) => {
     let id = id0;
     return () => (id++);
   })(0);
   //-----------------------------------
-  //__([a,b], true) // new seq depends on ds =[a,b]
-  const __ = (ds = [], store = false) => {
-    if (typeof ds === "boolean") {
-      store = ds;
-      ds = [];
+  //__([a,b], true) // new seq depenus on us =[a,b]
+  const __ = (us = [], store = false) => {
+    if (typeof us === "boolean") {
+      store = us;
+      us = [];
     }
     const seq = []; //seq is vanilla JS array + features
     seq.id = getID();
     seq.store = store;
-    seq.us = [];
-    seq.ds = ds;
-    seq.updatedFor = {};
-    seq.ds.map((d) => { // add self seq to us Array of d
-      d.us[d.us.length] = seq;
-      d.updatedFor[seq.id] = 0; // non-interference dependency
+    seq.us = us;
+    seq.ds = [];
+
+    seq.updatedTo = {};
+    seq.us.map((u) => { //  seq is a member of u.ds
+      u.ds[u.ds.length] = seq;
+      u.updatedTo[seq.id] = 0; // non-interference dependency
     });
     seq.IndexOnTimestamp = {};
     seq.TimestampOnIndex = {};
@@ -44,8 +45,8 @@
           },
           set(tval) {
             if ((seq.propagating === 0) //sanity check
-              && (seq.ds.length !== 0)) {
-              throw new Error("cannot set a value on sequence that depends on other sequences");
+              && (seq.us.length !== 0)) {
+              throw new Error("cannot set a value on sequence that depenus on other sequences");
             } else {
               seq.propagating = 0;
               if (seq.done === 0) {
@@ -56,18 +57,18 @@
                   seq.TimestampOnIndex[seq.length] = seq.T;
                   seq[seq.length] = seq.valOnT; //after funcs
                 }
-                Object.keys(seq.updatedFor).map((key) => {
-                  seq.updatedFor[key] = 1;
+                Object.keys(seq.updatedTo).map((key) => {
+                  seq.updatedTo[key] = 1;
                 });
-                //clear updated ds in non-interference way
-                seq.ds.map((d) => (d.updatedFor[seq.id] = 0));
-                seq.us.map((u) => {
-                  const dsAllUpdated = u.ds
-                    .map((d) => (d.updatedFor[u.id]))
+                //clear updated us in non-interference way
+                seq.us.map((u) => (u.updatedTo[seq.id] = 0));
+                seq.ds.map((d) => {
+                  const usAllUpdated = d.us
+                    .map((u) => (u.updatedTo[d.id]))
                     .reduce((a, b) => (a * b));
-                  if (dsAllUpdated === 1) {
-                    u.propagating = 1;
-                    u.t = u.ds.map((d) => (d.t));
+                  if (usAllUpdated === 1) {
+                    d.propagating = 1;
+                    d.t = d.us.map((u) => (u.t));
                   }
                 });
               }

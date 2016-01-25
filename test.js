@@ -289,4 +289,16 @@
       });
   })();
 
+
+  /*
+
+    (() => {
+
+      const loop = Immutable.Range(0, 999999) //loop 10 times
+        .map((c) => (__.log.t = c))
+        .toArray(); //lazy Seq toArray to compute
+    })();
+
+  */
+
 })();
