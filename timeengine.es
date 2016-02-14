@@ -1,5 +1,5 @@
 (() => {
-  'dse strict';
+  'use strict';
   const getID = ((id0) => {
     let id = id0;
     return () => (id++);

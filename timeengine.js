@@ -1,7 +1,7 @@
 "use strict";
 
 (function () {
-  'dse strict';
+  'use strict';
 
   var getID = function (id0) {
     var id = id0;
@@ -27,7 +27,7 @@
 
     seq.updatedTo = {};
     seq.us.map(function (u) {
-      // add self seq to ds Array of d
+      //  seq is a member of u.ds
       u.ds[u.ds.length] = seq;
       u.updatedTo[seq.id] = 0; // non-interference dependency
     });

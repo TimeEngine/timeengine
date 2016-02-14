@@ -80,7 +80,7 @@
     const __seqEl = __([__count])
       .__(([count]) => (<span>{count}</span>));
     return (<div>
-           <button
+             <button
       onClick={() => (__updn.t = 1)}>{"Up"}</button>
            <button
       onClick={() => (__updn.t = -1)}>{"Down"}</button>
