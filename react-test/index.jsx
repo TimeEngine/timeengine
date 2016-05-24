@@ -26,9 +26,9 @@
   //                       on TimeEngine infinite Sequence
   // map natural numbers sequence on intervalSeq(1000)
   const TimerElement = () => __Element(__
-      .intervalSeq(Immutable.Range(), 1000)
-      .__((count) => (__.log.t = count)) //console.log
-      .__((count) => (<div>{"Timer : "}{count}</div>)));
+    .intervalSeq(Immutable.Range(), 1000)
+    .__((count) => (__.log.t = count)) //console.log
+    .__((count) => (<div>{"Timer : "}{count}</div>)));
 
   // memory leak, performance issue
   //how about games? memoized_reduce is needed
@@ -37,7 +37,7 @@
     const __updn = __(true); //1 or -1 or initially 0
     const __seqEl = __([__updn])
       .__(([updn]) => (__updn
-          .reduce((a, b) => (a + b)))) //js Array.reduce
+        .reduce((a, b) => (a + b)))) //js Array.reduce
       .__((count) => (<span>{count}</span>));
     const init = () => (__updn.t = 0); //just trigger to view the init
     const __runNow = __
@@ -48,7 +48,7 @@
       onClick={() => (__updn.t = 1)}>{"Up"}</button>
              <button
       onClick={() => (__updn.t = -1)}>{"Down"}</button>
-             &nbsp;&nbsp;{__Element(__seqEl)}&nbsp;&nbsp;
+               {__Element(__seqEl)}  
             </span>);
   };
 
@@ -84,7 +84,7 @@
       onClick={() => (__updn.t = 1)}>{"Up"}</button>
            <button
       onClick={() => (__updn.t = -1)}>{"Down"}</button>
-           &nbsp;&nbsp;{__Element(__seqEl)}&nbsp;&nbsp;
+             {__Element(__seqEl)}  
            <button
       onClick={init}>{"Reset"}</button>
           </div>);
@@ -99,16 +99,15 @@
     const THETA = DEG / 180 * Math.PI; //radian
     const G = 9.8; //gravity const
     //t seconds elapsed 0msec time resolution
-    const t = __
-      .intervalSeq(Immutable.Range(), 10)
-      .__((count) => (count * 10 / 1000));
+    const t = __([__.intervalSeq(Immutable.Range(), 10)])
+      .__(([count]) => (count * 10 / 1000));
     const x = __([t]).__(([t]) => V0 * Math.cos(THETA) * t);
-    const y = __([t]).__(([t]) => V0 * Math.sin(THETA) * t - 1 / 2 * G * Math.pow(t, 2));
+    const y = __([t]).__(([t]) => V0 * Math.sin(THETA) * t - 1 / 2 * G * Math.pow(t, 2)).log();
     //==================================
     const Drawscale = 1; //1 dot = 1 meter
     const __seqEl = __([x, y]) //atomic update
       .__(([x, y]) => (
-      <div>
+        <div>
         <svg height = "250"  width = "100%">
             <circle r="2" fill="red"
         cx = {50 + x * Drawscale} cy = {250 - y * Drawscale}/>
