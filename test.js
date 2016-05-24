@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const __ = require('./timeengine.js');
+  const __ = require('./timeengine.es');
   const Immutable = require('immutable');
 
 

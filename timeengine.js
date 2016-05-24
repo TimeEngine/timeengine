@@ -40,10 +40,11 @@
       return seq.eqs[seq.eqs.length] = eq;
     };
     seq.evalEqs = function (val) {
+      var val0 = val;
       seq.eqs.map(function (eq) {
         return val = eq(val);
       });
-      return val;
+      return seq.us.length === 0 ? val0 : val;
     };
     //api-----------------
     Object.keys(__.api).map(function (api) {

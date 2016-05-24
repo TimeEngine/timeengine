@@ -29,8 +29,9 @@
     seq.eqs = [];
     seq.addEq = (eq) => (seq.eqs[seq.eqs.length] = eq);
     seq.evalEqs = (val) => {
+      const val0 = val;
       seq.eqs.map((eq) => (val = eq(val)));
-      return val;
+      return (seq.us.length === 0) ? val0 : val;
     };
     //api-----------------
     Object.keys(__.api).map((api) => {
