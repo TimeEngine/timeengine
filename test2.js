@@ -1,8 +1,8 @@
 (() => {
-  'use strict';
+  "use strict";
 
-  const __ = require('./timeengine.es');
-  const Immutable = require('immutable');
+  const __ = require("./timeengine.es");
+  const Immutable = require("immutable");
 
   (() => {
     const __delay = __
@@ -14,8 +14,7 @@
         const __b = __([__a]) //constructor
           .__(([a]) => (a + 1))
           .log();
-        ; //
-
+ 
         const __log1 = __a.log("__a");
         const __log2 = __b.log("__b");
 

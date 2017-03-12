@@ -1,9 +1,8 @@
 (() => {
-  'use strict';
+  "use strict";
 
-  const __ = require('./timeengine.es');
-  const Immutable = require('immutable');
-
+  const __ = require("./timeengine.es");
+  const Immutable = require("immutable");
 
   (() => {
     const __delay = __
@@ -113,12 +112,12 @@
           .__(([a, b, c, d]) => a + b + c + d);
         const __atomic = __([__a, __b, __c, __d, __e]);
 
-        const __log1 = __a.log('__a');
-        const __log2 = __b.log('__b'); // b.t = 1 * 2 = 2
-        const __log3 = __c.log('__c'); // c.t = 1 + 2 * 3 = 7
-        const __log4 = __d.log('__d'); // d.t = 2 * 100 = 200
-        const __log5 = __e.log('__e'); //210
-        const __log6 = __atomic.log('__atomic');
+        const __log1 = __a.log("__a");
+        const __log2 = __b.log("__b"); // b.t = 1 * 2 = 2
+        const __log3 = __c.log("__c"); // c.t = 1 + 2 * 3 = 7
+        const __log4 = __d.log("__d"); // d.t = 2 * 100 = 200
+        const __log5 = __e.log("__e"); //210
+        const __log6 = __atomic.log("__atomic");
 
         __a.t = 1; // the whole val will be updated
         __a.t = 2;
@@ -126,6 +125,7 @@
         //cannot set a value on sequence that depends on other sequences
               __b.t = 99;
         */
+
 
       });
 
@@ -144,10 +144,10 @@
         const __abc = __([__a, __b, __c])
           .__(([a, b, c]) => a + b + c);
 
-        const __log1 = __a.log('__a');
-        const __log2 = __b.log('__b');
-        const __log3 = __c.log('__c');
-        const __log4 = __abc.log('__abc');
+        const __log1 = __a.log("__a");
+        const __log2 = __b.log("__b");
+        const __log3 = __c.log("__c");
+        const __log4 = __abc.log("__abc");
         __a.t = 1;
         __a.t = 2;
         __b.t = 1;
@@ -161,12 +161,12 @@
 
   /*
     const loop = Immutable.Range(0, 10) //loop 10 times
-.map((c) => (__.log.t = c))
-.toArray(); //lazy Seq toArray to compute
+  .map((c) => (__.log.t = c))
+  .toArray(); //lazy Seq toArray to compute
 
 
     const timerts = __.intervalSeq(Immutable.Range(0, 5), 1000)
-.log(">>>");
+  .log(">>>");
   */
 
   (() => {
