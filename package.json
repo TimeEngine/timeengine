@@ -1,6 +1,6 @@
 {
   "name": "timeengine",
-  "version": "6.6.0",
+  "version": "6.6.99",
   "description": "TimeEngine is a tiny, simple yet versatile library that provides first class reactive value 'over time' with smart dependency resolving capability in JavaScript. Designed for Declarative and FRP programming.",
   "main": "timeengine.js",
   "scripts": {
