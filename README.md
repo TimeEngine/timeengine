@@ -1,7 +1,10 @@
 # timeengine
 
-<img src="http://timeengine.github.io/images/timeengine-logo.svg" width="200">
+### Depreciated
 
+### This project is moved to [chronologic](https://www.npmjs.com/package/chronologic) !!
+
+　
 
 [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url][![Dependency status][david-dm-image]][david-dm-url][![Dev Dependency status][david-dm-dev-image]][david-dm-dev-url][![npm](https://img.shields.io/npm/l/express.svg)]()
 
