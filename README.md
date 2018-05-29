@@ -2,8 +2,10 @@
 
 ### Depreciated
 
-### This project is moved to [chronologic](https://www.npmjs.com/package/chronologic) !!
+#### This project is moved to timeline-monoid!!
 
+#### GitHub: [timeline-monoid](https://github.com/timeline-monoid/timeline-monoid)    
+#### npm : [timeline-monoid](https://www.npmjs.com/package/timeline-monoid)
 　
 
 [![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url][![Dependency status][david-dm-image]][david-dm-url][![Dev Dependency status][david-dm-dev-image]][david-dm-dev-url][![npm](https://img.shields.io/npm/l/express.svg)]()
